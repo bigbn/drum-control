@@ -7,13 +7,9 @@ DEFS_Debug := \
 	'-DUSING_UV_SHARED=1' \
 	'-DUSING_V8_SHARED=1' \
 	'-DV8_DEPRECATION_WARNINGS=1' \
-	'-DV8_DEPRECATION_WARNINGS' \
-	'-DV8_IMMINENT_DEPRECATION_WARNINGS' \
 	'-D_LARGEFILE_SOURCE' \
 	'-D_FILE_OFFSET_BITS=64' \
-	'-D__STDC_FORMAT_MACROS' \
 	'-DOPENSSL_NO_PINSHARED' \
-	'-DOPENSSL_THREADS' \
 	'-DBUILDING_NODE_EXTENSION' \
 	'-DDEBUG' \
 	'-D_DEBUG' \
@@ -26,7 +22,6 @@ CFLAGS_Debug := \
 	-Wall \
 	-Wextra \
 	-Wno-unused-parameter \
-	-m64 \
 	-g \
 	-O0
 
@@ -44,27 +39,23 @@ CFLAGS_CC_Debug := \
 	-fpic
 
 INCS_Debug := \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/include/node \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/src \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/deps/openssl/config \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/deps/openssl/openssl/include \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/deps/uv/include \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/deps/zlib \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/deps/v8/include \
-	-I/home/bigbn/Projects/libeXaDrums
+	-I/root/.cache/node-gyp/10.18.0/include/node \
+	-I/root/.cache/node-gyp/10.18.0/src \
+	-I/root/.cache/node-gyp/10.18.0/deps/openssl/config \
+	-I/root/.cache/node-gyp/10.18.0/deps/openssl/openssl/include \
+	-I/root/.cache/node-gyp/10.18.0/deps/uv/include \
+	-I/root/.cache/node-gyp/10.18.0/deps/zlib \
+	-I/root/.cache/node-gyp/10.18.0/deps/v8/include \
+	-I$(srcdir)/libeXaDrums
 
 DEFS_Release := \
 	'-DNODE_GYP_MODULE_NAME=bindings' \
 	'-DUSING_UV_SHARED=1' \
 	'-DUSING_V8_SHARED=1' \
 	'-DV8_DEPRECATION_WARNINGS=1' \
-	'-DV8_DEPRECATION_WARNINGS' \
-	'-DV8_IMMINENT_DEPRECATION_WARNINGS' \
 	'-D_LARGEFILE_SOURCE' \
 	'-D_FILE_OFFSET_BITS=64' \
-	'-D__STDC_FORMAT_MACROS' \
 	'-DOPENSSL_NO_PINSHARED' \
-	'-DOPENSSL_THREADS' \
 	'-DBUILDING_NODE_EXTENSION'
 
 # Flags passed to all source files.
@@ -74,7 +65,6 @@ CFLAGS_Release := \
 	-Wall \
 	-Wextra \
 	-Wno-unused-parameter \
-	-m64 \
 	-O3 \
 	-fno-omit-frame-pointer
 
@@ -92,14 +82,14 @@ CFLAGS_CC_Release := \
 	-fpic
 
 INCS_Release := \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/include/node \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/src \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/deps/openssl/config \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/deps/openssl/openssl/include \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/deps/uv/include \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/deps/zlib \
-	-I/home/bigbn/.cache/node-gyp/12.18.3/deps/v8/include \
-	-I/home/bigbn/Projects/libeXaDrums
+	-I/root/.cache/node-gyp/10.18.0/include/node \
+	-I/root/.cache/node-gyp/10.18.0/src \
+	-I/root/.cache/node-gyp/10.18.0/deps/openssl/config \
+	-I/root/.cache/node-gyp/10.18.0/deps/openssl/openssl/include \
+	-I/root/.cache/node-gyp/10.18.0/deps/uv/include \
+	-I/root/.cache/node-gyp/10.18.0/deps/zlib \
+	-I/root/.cache/node-gyp/10.18.0/deps/v8/include \
+	-I$(srcdir)/libeXaDrums
 
 OBJS := \
 	$(obj).target/$(TARGET)/bindings.o
@@ -130,17 +120,15 @@ $(obj).$(TOOLSET)/$(TARGET)/%.o: $(obj)/%.cpp FORCE_DO_CMD
 ### Rules for final target.
 LDFLAGS_Debug := \
 	-pthread \
-	-rdynamic \
-	-m64
+	-rdynamic
 
 LDFLAGS_Release := \
 	-pthread \
-	-rdynamic \
-	-m64
+	-rdynamic
 
 LIBS := \
 	-lexadrums \
-	-L/home/bigbn/Projects/libeXaDrums/.libs
+	-LlibeXaDrums/.libs
 
 $(obj).target/bindings.node: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
 $(obj).target/bindings.node: LIBS := $(LIBS)

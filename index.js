@@ -7,5 +7,8 @@
 const gypBuild = require('node-gyp-build')
 const bindings = gypBuild(__dirname)
 
-console.log(bindings.init())
+console.log('Init...')
+console.log(bindings.init(10, (data) => {
+  console.log(data)
+}))
 console.log('Init complete')
