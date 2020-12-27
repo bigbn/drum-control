@@ -1,6 +1,7 @@
 #include <node_api.h>
 #include <Api/eXaDrums.hpp>
 #include <iostream>
+#include<thread>
 
 using namespace std;
 using namespace eXaDrumsApi;
@@ -25,18 +26,24 @@ namespace drumcontrol {
     return package_name;
   }
 
+  void loop_thread(eXaDrumsApi::eXaDrums &kit) {
+    kit.Start();
+    while (true) {};
+  }
 
   napi_value Init(napi_env env, napi_callback_info info) {
-    napi_status status;
+    // napi_status status;
  
-  	eXaDrumsApi::eXaDrums drumKit{"/home/bigbn/drums"};         
+    eXaDrumsApi::eXaDrums drumKit{"/root/.eXaDrums/Data/"};         
     
     error initError = drumKit.GetInitError();    
     if (initError.type != error_type_success) {
       napi_throw_error(env, "E_INIT", drumKit.GetInitError().message);
     } else {
-      drumKit.Start();
-    }      
+      thread func_thread(loop_thread, ref(drumKit));
+      if (func_thread.joinable()) func_thread.join(); 
+      //loop_thread(drumKit);
+    }
 
     return nullptr;    
   }
@@ -46,6 +53,8 @@ namespace drumcontrol {
     napi_value fn;
     
     status = napi_create_function(env, nullptr, 0, Init, nullptr, &fn);
+    // status = napi_create_threadsafe_function(env, Init, nullptr, nullptr, 0, nullptr, nullptr, nullptr, nullptr, &fn);
+
     if (status != napi_ok) return nullptr;
 
     status = napi_set_named_property(env, exports, "init", fn);
