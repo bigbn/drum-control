@@ -127,8 +127,13 @@ LDFLAGS_Release := \
 	-rdynamic
 
 LIBS := \
-	-lexadrums \
-	-LlibeXaDrums/.libs
+	/opt/drum-control/libeXaDrums/.libs/libexadrums.a \
+	-lsystemd \
+	-ltinyxml2 \
+	-lasound \
+	-lstdc++fs \
+	-latomic \
+	-lpthread
 
 $(obj).target/bindings.node: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
 $(obj).target/bindings.node: LIBS := $(LIBS)

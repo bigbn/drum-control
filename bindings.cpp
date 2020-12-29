@@ -1,7 +1,7 @@
 #include <node_api.h>
 #include <Api/eXaDrums.hpp>
 #include <iostream>
-#include<thread>
+#include <thread>
 #include <assert.h>
 
 using namespace std;
@@ -43,8 +43,15 @@ namespace drumcontrol {
     return package_name;
   }
 
+  bool afterstart(int val) {
+     printf("callee %d\n", val);
+     printf("calleeeeeeeeee\n");
+     return true;
+  }
+
   void loop_thread(eXaDrumsApi::eXaDrums &kit) {
-    kit.Start();
+
+    kit.Start(afterstart);
     // while (true) {};
   }
 
