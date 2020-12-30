@@ -93,7 +93,12 @@ namespace drumcontrol {
       // thread func_thread(loop_thread, ref(drumKit));
       // if (func_thread.joinable()) func_thread.join(); 
       // loop_thread(drumKit);
-      drumKit.Start(afterstart);
+      drumKit.Start([](int instumentId, float volume) {	
+        printf("%d - %g", instumentId, volume);
+	
+       /// ObjInfoThreadSafeFunctionDataEx_t *pObjList = (ObjInfoThreadSafeFunctionDataEx_t *)malloc(NUM_OBJECTS_TO_REPORT * sizeof(ObjInfoThreadSafeFunctionDataEx_t));
+///	napi_call_threadsafe_function(async_stream_data_ex.tsfn_StreamSearch, pObjList, napi_tsfn_nonblocking);
+      });
     }
 
     while(true) {
@@ -101,7 +106,7 @@ namespace drumcontrol {
       // ObjInfoThreadSafeFunctionDataEx_t *pObjList = (ObjInfoThreadSafeFunctionDataEx_t *)malloc(NUM_OBJECTS_TO_REPORT * sizeof(ObjInfoThreadSafeFunctionDataEx_t));
 
       // Call the thread safe function, that can call JavaScritp callback to push data to JavaScript
-      napi_call_threadsafe_function(async_stream_data_ex->tsfn_StreamSearch, pObjList, napi_tsfn_nonblocking)
+ //     napi_call_threadsafe_function(async_stream_data_ex->tsfn_StreamSearch, pObjList, napi_tsfn_nonblocking)
     }
 
     // Indicate that this thread will make no further use of the thread-safe function.
