@@ -12,6 +12,11 @@ using namespace Util;
 typedef enum { bird=0, cat, dog, car, bus, bicycle } SearchObjects;
 
 namespace drumcontrol {
+  
+  typedef struct {
+    int instumentId;
+    float volume;
+  } CallBackResult;
 
   typedef struct
   {
@@ -93,11 +98,11 @@ namespace drumcontrol {
       // thread func_thread(loop_thread, ref(drumKit));
       // if (func_thread.joinable()) func_thread.join(); 
       // loop_thread(drumKit);
-      drumKit.Start([](int instumentId, float volume) {	
+      drumKit.Start([&](int instumentId, float volume) {	
         printf("%d - %g", instumentId, volume);
-	
-       /// ObjInfoThreadSafeFunctionDataEx_t *pObjList = (ObjInfoThreadSafeFunctionDataEx_t *)malloc(NUM_OBJECTS_TO_REPORT * sizeof(ObjInfoThreadSafeFunctionDataEx_t));
-///	napi_call_threadsafe_function(async_stream_data_ex.tsfn_StreamSearch, pObjList, napi_tsfn_nonblocking);
+
+	CallBackResult result = { instumentId, volume };
+	napi_call_threadsafe_function(async_stream_data_ex->tsfn_StreamSearch, &result, napi_tsfn_nonblocking);
       });
     }
 
@@ -120,46 +125,24 @@ namespace drumcontrol {
     // This parameter is not used.
     (void)context;
 
-    // data: the result what worker thread has created.
-    // ObjInfoThreadSafeFunctionDataEx_t *pObjList = (ObjInfoThreadSafeFunctionDataEx_t *)data;
-    int ObjectArraySize = NUM_OBJECTS_TO_REPORT;
-
-    // env and js_cb may both be NULL if Node.js is in its cleanup phase, and
-    // items are left over from earlier thread-safe calls from the worker thread.
-    // When env is NULL, we simply skip over the call into Javascript and free the
-    // items.
+    CallBackResult *payload = (CallBackResult *)data;
+    
     if (env != NULL) {
       napi_value undefined;
-      napi_value js_result_array;
+      napi_value js_obj;
+      napi_value val_instument;         
+      napi_value val_volume;         
 
-      assert(napi_create_array_with_length(env, ObjectArraySize, &js_result_array) == napi_ok);
+      napi_create_object(env, &js_obj);             
+      napi_create_int32(env, payload->instumentId, &val_instument);
+      napi_create_double(env, payload->volume, &val_volume);
 
-      for (int i = 0; i < ObjectArraySize; ++i) {
-        napi_value js_obj;
-        napi_value val_obj;
-        //napi_value val_frame;
-        //const char *obj_name = GetObjName((pObjList + i)->obj);
-        napi_create_object(env, &js_obj);
-        // assert(napi_create_string_utf8(env, obj_name, NAPI_AUTO_LENGTH, &val_obj) == napi_ok);
-        //assert(napi_create_int32(env, (pObjList + i)->frame, &val_frame) == napi_ok);
+      napi_set_named_property(env, js_obj, "instrumentId", val_instument);
+      napi_set_named_property(env, js_obj, "volume", val_volume);
 
-        assert(napi_set_named_property(env, js_obj, "obj", val_obj) == napi_ok);
-        // assert(napi_set_named_property(env, js_obj, "f", val_frame) == napi_ok);
-
-        // Add the object to the array
-        assert(napi_set_element(env, js_result_array, i, js_obj) == napi_ok);
-      }
-
-      // Retrieve the JavaScript `undefined` value so we can use it as the `this`
-      // value of the JavaScript function call.
-      assert(napi_get_undefined(env, &undefined) == napi_ok);
-
-      // Call the JavaScript function and pass the N-API JavaScript value
-      assert(napi_call_function(env, undefined, js_cb, 1, &js_result_array, NULL) == napi_ok);
+      napi_get_undefined(env, &undefined);
+      napi_call_function(env, undefined, js_cb, 1, &js_obj, NULL);
     }
-
-    // Free the item created by the worker thread.
-    free(data);
   }
 
   napi_value CAsyncStreamSearch(napi_env env, napi_callback_info info) {
