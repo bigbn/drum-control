@@ -4,7 +4,7 @@ Release/obj.target/bindings/bindings.o: ../bindings.cpp \
  /root/.cache/node-gyp/10.18.0/include/node/node_api_types.h \
  ../libeXaDrums/Api/eXaDrums.hpp ../libeXaDrums/Api/eXaDrums.h \
  ../libeXaDrums/Api/Version.h ../libeXaDrums/Api/../Util/ErrorHandling.h \
- ../libeXaDrums/Api/eXaDrums.hpp
+ ../libeXaDrums/Api/../Util/Misc.h ../libeXaDrums/Api/eXaDrums.hpp
 ../bindings.cpp:
 /root/.cache/node-gyp/10.18.0/include/node/node_api.h:
 /root/.cache/node-gyp/10.18.0/include/node/node_api_types.h:
@@ -12,4 +12,5 @@ Release/obj.target/bindings/bindings.o: ../bindings.cpp \
 ../libeXaDrums/Api/eXaDrums.h:
 ../libeXaDrums/Api/Version.h:
 ../libeXaDrums/Api/../Util/ErrorHandling.h:
+../libeXaDrums/Api/../Util/Misc.h:
 ../libeXaDrums/Api/eXaDrums.hpp:

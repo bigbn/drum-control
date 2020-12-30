@@ -43,16 +43,8 @@ namespace drumcontrol {
     return package_name;
   }
 
-  bool afterstart(int val) {
-     printf("callee %d\n", val);
-     printf("calleeeeeeeeee\n");
-     return true;
-  }
-
-  void loop_thread(eXaDrumsApi::eXaDrums &kit) {
-
-    kit.Start(afterstart);
-    // while (true) {};
+  void afterstart(int triggerId, float value) {
+     printf("Event %d: %g \n", triggerId, value);
   }
 
   napi_value Init(napi_env env, napi_callback_info info) {
@@ -64,8 +56,8 @@ namespace drumcontrol {
     if (initError.type != error_type_success) {
       napi_throw_error(env, "E_INIT", drumKit.GetInitError().message);
     } else {
-      thread func_thread(loop_thread, ref(drumKit));
-      if (func_thread.joinable()) func_thread.join(); 
+//      thread func_thread(loop_thread, ref(drumKit));
+//      if (func_thread.joinable()) func_thread.join(); 
       //loop_thread(drumKit);
     }
 
@@ -100,7 +92,8 @@ namespace drumcontrol {
     } else {
       // thread func_thread(loop_thread, ref(drumKit));
       // if (func_thread.joinable()) func_thread.join(); 
-      loop_thread(drumKit);
+      // loop_thread(drumKit);
+      drumKit.Start(afterstart);
     }
 
     while(true) {
@@ -108,7 +101,7 @@ namespace drumcontrol {
       // ObjInfoThreadSafeFunctionDataEx_t *pObjList = (ObjInfoThreadSafeFunctionDataEx_t *)malloc(NUM_OBJECTS_TO_REPORT * sizeof(ObjInfoThreadSafeFunctionDataEx_t));
 
       // Call the thread safe function, that can call JavaScritp callback to push data to JavaScript
-      // assert(napi_call_threadsafe_function(async_stream_data_ex->tsfn_StreamSearch, pObjList, napi_tsfn_blocking) == napi_ok);
+      napi_call_threadsafe_function(async_stream_data_ex->tsfn_StreamSearch, pObjList, napi_tsfn_nonblocking)
     }
 
     // Indicate that this thread will make no further use of the thread-safe function.
