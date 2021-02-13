@@ -14,8 +14,8 @@ typedef enum { bird=0, cat, dog, car, bus, bicycle } SearchObjects;
 namespace drumcontrol {
   
   typedef struct {
-    int instumentId;
-    float volume;
+    int32_t instrumentId;
+    int32_t volume;
   } CallBackResult;
 
   typedef struct
@@ -98,10 +98,13 @@ namespace drumcontrol {
       // thread func_thread(loop_thread, ref(drumKit));
       // if (func_thread.joinable()) func_thread.join(); 
       // loop_thread(drumKit);
-      drumKit.Start([&](int instumentId, float volume) {	
-        printf("%d - %g", instumentId, volume);
+      drumKit.Start([&](int _instrumentId, float _rawVolume) {
+        printf("INST: %d \t VOL:%g\n", _instrumentId, _rawVolume);
 
-	CallBackResult result = { instumentId, volume };
+	int32_t instrumentId = _instrumentId;
+	int32_t volume =  static_cast<int>(_rawVolume*100);
+	CallBackResult result = { instrumentId, volume };
+
 	napi_call_threadsafe_function(async_stream_data_ex->tsfn_StreamSearch, &result, napi_tsfn_nonblocking);
       });
     }
@@ -130,14 +133,18 @@ namespace drumcontrol {
     if (env != NULL) {
       napi_value undefined;
       napi_value js_obj;
-      napi_value val_instument;         
+      napi_value val_instrument;         
       napi_value val_volume;         
 
-      napi_create_object(env, &js_obj);             
-      napi_create_int32(env, payload->instumentId, &val_instument);
-      napi_create_double(env, payload->volume, &val_volume);
+      napi_create_object(env, &js_obj);
+      napi_create_int32(env, payload->instrumentId, &val_instrument);
+      napi_create_int32(env, payload->volume, &val_volume);
 
-      napi_set_named_property(env, js_obj, "instrumentId", val_instument);
+      //      cout << "String is  : " <<  payload->instrumentId.c_str() << endl ;
+//       napi_create_string_utf8(env, payload->instrumentId.c_str(), -1, &val_instrument);
+//       napi_create_string_utf8(env, payload->volume.c_str(), -1, &val_volume);
+//      printf("RESVOL: %d - %d\n", int(payload->instrumentId), int(payload->volume));
+      napi_set_named_property(env, js_obj, "instrumentId", val_instrument);
       napi_set_named_property(env, js_obj, "volume", val_volume);
 
       napi_get_undefined(env, &undefined);

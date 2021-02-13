@@ -10,6 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "node-gyp-build": "^4.2.3"
+    "coffee-script": "^1.12.7",
+    "lodash": "^4.17.20",
+    "node-gyp-build": "^4.2.3",
+    "oled-font-5x7": "^1.0.3",
+    "raspi": "^6.0.1",
+    "raspi-gpio": "^6.2.2",
+    "rpi-oled": "^0.9.1"
   }
 }
