@@ -14,6 +14,26 @@ const font = require('oled-font-5x7')
 const raspi = require('raspi');
 const gpio = require('raspi-gpio');
 
+
+const instrument = (name) => {
+  return {
+    Gain: "",
+    Threshold: "",
+    ScanTime: "",
+    MaskTime: ""
+  }
+}
+
+const menu = {
+  "Instuments": {
+    "HiHat": instrument('HiHat'),
+    "Snare": instrument('Snare'),
+    "Kick": instrument('Kick'),
+    "Crash": instrument('Crash'),
+    "Tom": instrument('Tom'),
+  }
+}
+
 const opts = {
   width: 128, // screen width
   height: 32, // screen height
@@ -35,7 +55,6 @@ oled.writeString(font, 1, 'Ready - [OK]', 1, false);
 
 let offTimeout = null
 const enableDisplay = _.throttle(() => oled.dimDisplay(false), 5000)
-
 
 const update = (volume) => {
   oled.clearDisplay();

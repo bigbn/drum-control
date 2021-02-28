@@ -99,7 +99,7 @@ namespace drumcontrol {
       // if (func_thread.joinable()) func_thread.join(); 
       // loop_thread(drumKit);
       drumKit.Start([&](int _instrumentId, float _rawVolume) {
-        printf("INST: %d \t VOL:%g\n", _instrumentId, _rawVolume);
+        // printf("INST: %d \t VOL:%g\n", _instrumentId, _rawVolume);
 
 	int32_t instrumentId = _instrumentId;
 	int32_t volume =  static_cast<int>(_rawVolume*100);
