@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node-gyp clean configure build",
+    "install": "install -d $(pwd)",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
