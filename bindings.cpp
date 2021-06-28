@@ -1,5 +1,5 @@
 #include <node_api.h>
-#include <Api/eXaDrums.hpp>
+#include <exadrums/eXaDrums.h>
 #include <iostream>
 #include <thread>
 #include <assert.h>

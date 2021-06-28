@@ -2,16 +2,14 @@
   "targets": [
     {
       "target_name": "bindings",
-      "sources": [ "bindings.cpp" ],      
-      "include_dirs": [ "libeXaDrums"],
+      "sources": [ "bindings.cpp" ],
       "libraries": [ 
-	"/opt/drum-control/libeXaDrums/.libs/libexadrums.a" , 
-	"-lsystemd", 
-	"-ltinyxml2", 
-	"-lasound", 
-	"-lstdc++fs",
-	"-latomic",
-	"-lpthread"
+        "-lexadrums",
+      	"-ltinyxml2", 
+	      "-lasound", 
+	      "-lstdc++fs",
+	      "-latomic",
+	      "-lpthread"
       ],
       "cflags_cc": ['-fexceptions', '-std=c++17', '-c', '-fpic']
     }
